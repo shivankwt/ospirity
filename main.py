@@ -14,6 +14,18 @@ intents.guilds = True
 client = commands.Bot(command_prefix='.', intents=intents)
 
 
+@client.event
+async def on_ready():
+    await client.change_presence(status=discord.Status.idle) # defualt status: idle
+    print("bot started")
+
+@client.event
+async def on_message(message):
+    if message.author.bot:
+        return 
+    await client.process_commands(message)
+
+
 async def load_cogs(): # loading cogs from "cogs" dir.
     try:
         cogs_directory = "./cogs"
