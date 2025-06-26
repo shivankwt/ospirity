@@ -1,5 +1,11 @@
-import os,  asyncio, discord
+import os
+import asyncio 
+import discord
 from discord.ext import commands
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 # bot intents 
 
@@ -38,10 +44,13 @@ async def load_cogs(): # loading cogs from "cogs" dir.
         print("failed: ", e)
 
 async def main(): # start the bot
-    
-    await load_cogs()
+    try:
+        await load_cogs()
 
-    async with client:
-        await client.start(os.getenv("DISCORD_API_KEY"))
+        async with client:
+            await client.start(os.getenv('DISCORD_API_KEY'))
+    
+    except KeyboardInterrupt:
+        print("bot has been shut down")
 
 asyncio.run(main())

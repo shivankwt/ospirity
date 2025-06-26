@@ -18,3 +18,9 @@ moderation
 - mute
 - unmute
 - if possible maybe add create category and channel directly too
+
+error handle
+
+  - send error in channel?
+  - maybe embed? i think i'll send normal error messages instead of embed/?
+  
