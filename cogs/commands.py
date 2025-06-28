@@ -57,9 +57,7 @@ class Commands(commands.Cog):
             await self.error_handle(ctx, e) # send error message with error_handle/ also create a separate utility.py ?
 
 
-    async def error_handle(self, ctx, error):
-        
-        pass
+
 
 async def setup(client):
     await client.add_cog(Commands(client=client))
