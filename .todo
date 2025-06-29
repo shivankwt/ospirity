@@ -11,13 +11,12 @@ general
 
 moderation
 
-- kick
-- ban
-- unban
+- unban # maybe not have embeds? it looks fancy yes but it's not smth i'd like.. also setting up buttons and stuff requires nextcord and now changing lib is a  pain 
 - purge message?
 - mute
 - unmute
 - if possible maybe add create category and channel directly too
+- forgot they all have errors too so maybe fix that later as well?
 
 error handle
 
