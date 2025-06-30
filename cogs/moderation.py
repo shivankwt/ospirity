@@ -17,12 +17,7 @@ class Moderation(commands.Cog):
             reason = "no reason provided."
         try:
             await member.kick(reason=reason)
-            embed = discord.Embed( # maybe later i'll just make it a simple message instead of fancy embeds.
-                title="member kicked",
-                description=f"{member} has been kicked by {ctx.message.author.name}. reason: {reason}",
-                color=0xFF0000
-            )
-            await ctx.send(embed=embed)
+            await ctx.send(f"{member} has been kicked by {ctx.message.author.name}. reason: {reason}")
         except Exception as e:
             await self.handle_error(ctx, e)
 
@@ -31,12 +26,7 @@ class Moderation(commands.Cog):
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         try:
             await member.ban(reason=reason)
-            embed = discord.Embed(
-                title="member banned",
-                description=f"{member} has been banned by {ctx.message.author.name}. reason: {reason or 'No reason provided.'}",
-                color=0xFF0000
-            )
-            await ctx.send(embed=embed)
+            await ctx.send(f"{member} has been banned by {ctx.message.author.name}. reason: {reason or 'No reason provided.'}")
         except Exception as e:
             await self.handle_error(ctx, e)
 
@@ -47,11 +37,6 @@ class Moderation(commands.Cog):
             try:
                 user = await self.client.fetch_user(id)
                 await ctx.guild.unban(user)
-                embed = discord.Embed(
-                    title="member unbanned",
-                    description=f'{user} has been unbanned by {ctx.message.author.name}',
-                    color=0x00FF00
-                )
-                await ctx.send(embed=embed)
+                await ctx.send(f'{user} has been unbanned by {ctx.message.author.name}')
             except Exception as e:
                 await self.handle_error(ctx, e)
