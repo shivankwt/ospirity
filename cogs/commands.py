@@ -57,8 +57,67 @@ class Commands(commands.Cog):
             print(f"error in module {__file__}: ", e)
             await self.error_handle(ctx, e) # send error message with error_handle/ also create a separate utility.py ?
 
+    @commands.command(aliases=['av', 'pp'])
+    @commands.bot_has_guild_permissions()
+    async def avatar(self, ctx, member: discord.Member=None):
+        try:
+            member = member or ctx.author # pinged member or self
+            embed = discord.Embed(title=f"{member.display_name}'s avatar", color=0x0FF00)
+            embed.set_image(url=member.display_avatar.url)
+            embed.set_footer(text="created by ospirity")
+            await ctx.send(embed=embed)
+        
+        except Exception as e:
+            await self.error_handle(ctx, e)
+    
+    @commands.command()
+    async def ping(self, ctx):
+        try: 
+            await ctx.send(f"ping: {round(self.client.latency * 1000)} ms")
+        except Exception as e:
+            await self.error_handle(ctx, e)
 
+    @commands.command(aliases=['q'])
+    @commands.bot_has_guild_permissions(send_messages=True, embed_links=True)
+    async def quote(self, ctx, cagtegory: str = None):
+        print("quote command")
 
+        try:
+            if cagtegory:
+                quote  = get_quotes(cagtegory=cagtegory)
+            else:
+                quote = get_quotes(random=True)
+            
+            print(quote) 
+
+            if not quote or "data" not in quote or not quote['data']:
+                raise ValueError("no quotes found for the given category")
+            
+            for key in quote['data']:
+                embed = discord.Embed(color=0xFFFFFF)
+                embed.add_field(name="", value=key['quote'], inline=False)
+                embed.set_footer(text=f" - {key['author']}")
+                await ctx.send(embed=embed)
+
+        except Exception as e:
+            await self.error_handle(ctx, e)
+
+    @commands.command(aliases=['cap'])
+    @commands.bot_has_guild_permissions(read_messages=True)
+    async def caption(self, ctx):
+        try:
+            if ctx.message.reference:
+                reference = ctx.message.reference.resolved
+                if not reference:
+                    reference = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+                    message, author, url = reference.content, reference.author, reference.jump_url 
+
+                    print(url)
+                    print(message, author)
+
+                    embed = discord.Embed()
+        except:
+            pass
 
 async def setup(client):
     await client.add_cog(Commands(client=client))
