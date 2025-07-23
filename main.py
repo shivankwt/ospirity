@@ -14,9 +14,6 @@ intents.message_content = True
 intents.members = True
 intents.guilds = True
 
-
-# instance 
-
 client = commands.Bot(command_prefix='.', intents=intents)
 
 
@@ -24,6 +21,7 @@ client = commands.Bot(command_prefix='.', intents=intents)
 async def on_ready():
     await client.change_presence(status=discord.Status.idle) # defualt status: idle
     print("bot started")
+
 
 @client.event
 async def on_message(message):
