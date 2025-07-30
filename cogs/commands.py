@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import datetime
 from quotes_library import get_quotes, get_authors, get_categories
+from utils.err_handle import ErrorHandler # inst utils. 
 
 class Commands(commands.Cog):
     def __init__(self, client):
@@ -11,13 +12,10 @@ class Commands(commands.Cog):
     async def on_ready(self):
         print("commmand cog is ready.")
 
-    def error_embed(self, title, description):
-        embed = discord.Embed(title=title, description=description, color=0xFF0000)
-        return embed
-    
     @commands.command(aliases=['stats', 'cs', 'cstats'])
     @commands.bot_has_guild_permissions()
     async def channelstats(self, ctx):
+
         print("channel stats command initiated")
         channel = ctx.channel
         
@@ -36,7 +34,7 @@ class Commands(commands.Cog):
 
         except Exception as e:
             print(f"error in module {__file__}: ", e)
-            await self.error_handle(ctx, e)
+            await self.handle_error(ctx, e)
 
     @commands.command(aliases=['info', 'inf'])
     @commands.bot_has_guild_permissions()
@@ -55,7 +53,7 @@ class Commands(commands.Cog):
 
         except Exception as e:
             print(f"error in module {__file__}: ", e)
-            await self.error_handle(ctx, e) # send error message with error_handle/ also create a separate utility.py ?
+            await self.handle_error(ctx, e) # send error message with handle_error/ also create a separate utility.py ?
 
     @commands.command(aliases=['av', 'pp'])
     @commands.bot_has_guild_permissions()
@@ -68,14 +66,14 @@ class Commands(commands.Cog):
             await ctx.send(embed=embed)
         
         except Exception as e:
-            await self.error_handle(ctx, e)
+            await self.handle_error(ctx, e)
     
     @commands.command()
     async def ping(self, ctx):
         try: 
             await ctx.send(f"ping: {round(self.client.latency * 1000)} ms")
         except Exception as e:
-            await self.error_handle(ctx, e)
+            await self.handle_error(ctx, e)
 
     @commands.command(aliases=['q'])
     @commands.bot_has_guild_permissions(send_messages=True, embed_links=True)
@@ -84,23 +82,22 @@ class Commands(commands.Cog):
 
         try:
             if cagtegory:
-                quote  = get_quotes(cagtegory=cagtegory)
+                quote_data = get_quotes(category=cagtegory)
             else:
-                quote = get_quotes(random=True)
-            
-            print(quote) 
+                quote_data = get_quotes(random=True)
 
-            if not quote or "data" not in quote or not quote['data']:
+            if not quote_data or "data" not in quote_data or not quote_data['data']:
                 raise ValueError("no quotes found for the given category")
             
-            for key in quote['data']:
-                embed = discord.Embed(color=0xFFFFFF)
-                embed.add_field(name="", value=key['quote'], inline=False)
+            for key in quote_data["data"]:
+                embed = discord.Embed(color=0xFFFFFFF)
+                embed.add_field(name="huh", value=key['quote'], inline=False)
                 embed.set_footer(text=f" - {key['author']}")
-                await ctx.send(embed=embed)
 
+                await ctx.send(embed=embed)
+    
         except Exception as e:
-            await self.error_handle(ctx, e)
+            await self.handle_error(ctx, e)
 
     @commands.command(aliases=['cap'])
     @commands.bot_has_guild_permissions(read_messages=True)
@@ -116,10 +113,8 @@ class Commands(commands.Cog):
                     print(message, author)
 
                     embed = discord.Embed()
-        except:
-            pass
+        except Exception as e:
+            await self.handle_error(ctx, e)
 
 async def setup(client):
     await client.add_cog(Commands(client=client))
-
-

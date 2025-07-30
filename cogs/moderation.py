@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import datetime
 
+
+
 class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -24,7 +26,7 @@ class Moderation(commands.Cog):
     # async def kick_errora(self, ctx, error): 
 
     @commands.command()
-    @commands.has_permissions(ban_member=True)
+    @commands.has_permissions(moderate_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         try:
             await member.ban(reason=reason or "")
@@ -37,7 +39,7 @@ class Moderation(commands.Cog):
     # async ban_error(self, ctx, error):
 
     @commands.command()
-    @commands.has_permissions(ban_members=True)
+    @commands.has_permissions(moderate_members=True)
     async def unban(self, ctx, id: int = None, *, reason=None):
         if id:
             try:
@@ -71,5 +73,5 @@ class Moderation(commands.Cog):
         except Exception as e:
             pass
 
-    async def setup(client):
-        await client.add_cog(Moderation(client=client))
+async def setup(client):
+    await client.add_cog(Moderation(client=client))

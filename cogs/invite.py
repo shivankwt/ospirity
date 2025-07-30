@@ -27,5 +27,5 @@ class Invite(commands.Cog):
         # won't work. i've to find a way around this issue
         pass
 
-    async def setup(client):
-        await client.add_cog(Invite(client=client))
+async def setup(client):
+    await client.add_cog(Invite(client=client))
