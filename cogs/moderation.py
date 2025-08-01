@@ -1,12 +1,13 @@
 import discord
 from discord.ext import commands
-import datetime
+from utils.err_handle import ErrorHandler
 
 
 
 class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.err_handler = ErrorHandler()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -29,10 +30,13 @@ class Moderation(commands.Cog):
     @commands.has_permissions(moderate_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         try:
+            if not member:
+                await ctx.send("i need a member id to ban or their ping")
+
             await member.ban(reason=reason or "")
             await ctx.send(f"{member} has been banned by {ctx.message.author.name}")
-            # i can maybe setup a util.. that'll send either embed as the message or simple message!
-        
+            # i can maybe setup a util.. that'll send either embed as the message or simple message
+
         except Exception as e:
             pass
     
@@ -43,6 +47,8 @@ class Moderation(commands.Cog):
     async def unban(self, ctx, id: int = None, *, reason=None):
         if id:
             try:
+                if not id:
+                    await ctx.send("no id given")                
                 user = await self.client.fetch_user(id)
                 await ctx.guild.unban(user)
                 await ctx.send(f"{user} has been unbanned by {ctx.member.author.mame}")
@@ -57,8 +63,7 @@ class Moderation(commands.Cog):
     async def purge(self, ctx, limit: int = 1):
         try:
             await ctx.channel.purge(limit=limit, bulk=True)
-            ctx.send(f"{limit} messages were removed by {ctx.message.author.name}")
-        
+            ctx.channel.send(f"{limit} messages were removed by {ctx.message.author.name}")
         except Exception as e:
             pass
     
