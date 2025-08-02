@@ -1,7 +1,9 @@
 import discord
+
 from discord.ext import commands
 from utils.err_handle import ErrorHandler
 
+# purge error: enable tracemalloc
 
 
 class Moderation(commands.Cog):
@@ -17,11 +19,13 @@ class Moderation(commands.Cog):
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         try:
+            print("kick command")
             await member.kick(reason=reason or "")
             await ctx.send(f"{member} has been kicked by {ctx.message.author.name}")
         
         except Exception as e:
-            pass 
+            print(f"error in module {__file__}: ", e)
+            await self.err_handler.handle_error(e)
             # maybe write another separate func to handle all sorts of error?
     
     # async def kick_errora(self, ctx, error): 
@@ -38,7 +42,8 @@ class Moderation(commands.Cog):
             # i can maybe setup a util.. that'll send either embed as the message or simple message
 
         except Exception as e:
-            pass
+            print(f"error in module {__file__}: ", e)
+            await self.err_handler.handle_error(e)
     
     # async ban_error(self, ctx, error):
 
@@ -54,7 +59,8 @@ class Moderation(commands.Cog):
                 await ctx.send(f"{user} has been unbanned by {ctx.member.author.mame}")
             
             except Exception as e:
-                pass
+                print(f"error in module {__file__}: ", e)
+                await self.err_handler.handle_error(e)
     
     # async def unban_error(self, ctx, error)
 
@@ -65,7 +71,8 @@ class Moderation(commands.Cog):
             await ctx.channel.purge(limit=limit, bulk=True)
             ctx.channel.send(f"{limit} messages were removed by {ctx.message.author.name}")
         except Exception as e:
-            pass
+            print(f"error in module {__file__}: ", e)
+            await self.err_handler.handle_error(e)
     
     # async def purge_error(self, ctx, error)
 
@@ -76,7 +83,8 @@ class Moderation(commands.Cog):
             pass
             # maybe parse the timelimit?? or smth? to fetch it correct?
         except Exception as e:
-            pass
+            print(f"error in module {__file__}: ", e)
+            await self.err_handler.handle_error(e)
 
 async def setup(client):
     await client.add_cog(Moderation(client=client))

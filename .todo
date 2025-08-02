@@ -6,6 +6,9 @@ general
 - channel stats
 - a system to create image out of the message, if user pings message???
 - about memeber too maybe?
+- avatar
+- category stats
+
 
 moderation
 
@@ -13,11 +16,11 @@ moderation
 - purge message?
 - mute
 - unmute
-- if possible maybe add create category and channel directly too
-- forgot they all have errors too so maybe fix that later as well?
-- i'll have to figure out the logging system too
+- logging bot usage and commands!?
 
-error handle
+error handling
 
-  - send error in channel?
-  - maybe embed? i think i'll send normal error messages instead of embed
+  - send error in channel itself?
+  - separate error util: `os*/utils/err_handle.py`
+  - maybe embed? i think i'll send normal error messages instead of embed, haven't decided yet.
+  - 
