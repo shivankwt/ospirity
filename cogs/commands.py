@@ -8,7 +8,7 @@ from discord.ext import commands
 class Commands(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.err_handler = ErrorHandler()
+        self.err_handler = ErrorHandler() 
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -33,7 +33,7 @@ class Commands(commands.Cog):
             await ctx.send(embed=embed)
 
         except Exception as err:
-            print(f"error in module {__file__}: ", err)
+            print(f"error in module {__file__}:: ", err)
             await self.err_handler.handle_error(ctx, err)
 
     @commands.command(aliases=['info', 'inf'])
@@ -50,7 +50,7 @@ class Commands(commands.Cog):
             await ctx.send(embed=embed)
 
         except Exception as err:
-            print(f"error in module {__file__}: ", err)
+            print(f"error in module {__file__}:: ", err)
             await self.handle_error(ctx, err)
 
     @commands.command(aliases=['av', 'pp'])
@@ -63,7 +63,7 @@ class Commands(commands.Cog):
             await ctx.send(embed=embed)
 
         except Exception as err:
-            print(f"error in module {__file__}: ", err)
+            print(f"error in module {__file__}::", err)
             await self.handle_error(ctx, err)
 
     @commands.command()
@@ -71,7 +71,7 @@ class Commands(commands.Cog):
         try:
             await ctx.send(f"ping: {round(self.client.latency * 1000)} ms")
         except Exception as err:
-            print(f"error in module {__file__}: ", err)
+            print(f"error in module {__file__}:: ", err)
             await self.handle_error(ctx, err)
 
     @commands.command()
@@ -87,38 +87,42 @@ class Commands(commands.Cog):
             "attitude",
             "coding"
         ]
-
         try:
             if category is None:
                 quote = pyquotegen.get_quote()
-                await ctx.send(quote)
 
             elif category.lower() in categories:
                 quote = pyquotegen.get_quote(category.lower())
-                await ctx.send(quote)
 
             else:
-                await ctx.send("incorrect category, please choose from: " + ", ".join(categories))
+                quote = ("incorrect category, please choose from: " + ", ".join(categories))
+
+            embed = discord.Embed()
+            embed.add_field(name="quotation", value=quote, inline=False)
+            embed.set_footer(text=f" - requested by: {ctx.author}")
+            await ctx.send(embed=embed)
 
         except Exception as err:
-            print(f"error in module {__file__}: ", err)
+            print(f"error in module {__file__}:: ", err)
             await self.err_handler.handle_error(ctx, err)
 
-    @commands.command(aliases=['cap'])
-    @commands.bot_has_guild_permissions(read_messages=True)
+    @commands.command()
     async def caption(self, ctx):
+        print("caption command")
         try:
-            print("caption command")
-            if ctx.message.reference:
-                reference = ctx.message.reference.resolved
-                await ctx.send(ctx.message.reference)
-                await ctx.send(reference)
-
-                if not reference:
-                    reference = await ctx.channel.fetch_message(ctx.message.reference.message_id)
-                    message, author, url = reference.content, reference.author, reference.jump_url
+            reply = ctx.message.reference # Message.Reply won't work because that's for bots
+            if reply is not None:
+                print(reply.resolved)
+                embed = discord.Embed(color=0x0FF00)
+                embed.add_field(name="", value=f"{reply.resolved.content}") # add name here
+                embed.set_author(name=reply.resolved.author)
+                embed.set_footer(text=f" - requested by: {ctx.author}")
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send("this command doesn't work unless pinged someone's message")
 
         except Exception as err:
+            print(f"error in module {__file__}:: ", err)
             await self.handle_error(ctx, err)
 
 async def setup(client):
