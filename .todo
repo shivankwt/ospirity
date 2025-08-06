@@ -1,26 +1,42 @@
-stuff to add
+stuff to add [i don't recommend anyone reading this because it'll all look jibberish]
 
 
-general
+commands
 
 - channel stats
-- a system to create image out of the message, if user pings message???
+- forgot category stats
+- a system to create image out of the message, if user pings message??? nvm im good with embeds using pillow is too much work it's .caption
 - about memeber too maybe?
 - avatar
 - category stats
-
+- quote
+- caption
 
 moderation
 
-- unban # maybe not have embeds? it looks fancy yes but it's not smth i'd like.. also setting up buttons and stuff requires nextcord and now changing lib is a  pain 
+- unban ..maybe not have embeds? it looks fancy yes but it's not smth i'd like.. also setting up buttons and stuff requires nextcord and now changing lib is a  pain 
 - purge message?
 - mute
 - unmute
 - logging bot usage and commands!?
+- create channel
+- create category
+
+invite
+
+-idk what will i even do w this just copy pasted everything from yt a while ago
+
+
 
 error handling
 
   - send error in channel itself?
   - separate error util: `os*/utils/err_handle.py`
   - maybe embed? i think i'll send normal error messages instead of embed, haven't decided yet.
-  - 
+  - fun fact: i can handle each error locally instead of what i've been doin' globally.
+
+-- also ctx.channel sends message to context's default channel but that can be changed
+i can modify context object maybe? and change it's behavious that way ctx.channel.send and ctx.send will have different points
+i think logging will be better that way 
+
+also the indenting is horrible (looks that way to me, maybe i should change the var, args casing?)
