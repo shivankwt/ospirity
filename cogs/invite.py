@@ -24,7 +24,7 @@ class Invite(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
         # the issue here is it depends on the logs channel but in the scenario "logs" named channel doesn't exist most of the cmd
-        # won't work. i've to find a way around this issue
+        # won't work.
         pass
 
 async def setup(client):

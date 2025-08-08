@@ -4,6 +4,7 @@ import datetime
 from utils.err_handle import ErrorHandler  # inst utils.
 from discord.ext import commands
 
+# note: @command.error is just there for no reason, i don't know weather i'll keep it or remove it in future.
 
 class Moderation(commands.Cog):
     def __init__(self, client):
@@ -97,7 +98,7 @@ class Moderation(commands.Cog):
         pass
 
     @commands.command()
-    @commands.has_permissions(manage_members=True)
+    @commands.has_permissions(moderate_members=True)
     async def mute(self, ctx, member: discord.Member, timelimit='0s', *, reason=None):
 
         try:
@@ -137,6 +138,7 @@ class Moderation(commands.Cog):
     async def mute_error(self, ctx, error):
         pass
 
-    # add create category/ create channel commands too
         
 
+async def setup(client):
+    await client.add_cog(Moderation(client=client))
